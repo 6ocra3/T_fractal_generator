@@ -16,4 +16,15 @@ public class Transformations {
         return transformations[t];
     }
 
+    public Point applyTransformation(Point point){
+        double[] transformation = getTransformation();
+        return applyTransformation(point, transformation);
+    }
+
+    public Point applyTransformation(Point point, double[] transformation){
+        double newX = transformation[0] * point.x() + transformation[1] * point.y() + transformation[4];
+        double newY = transformation[2] * point.x() + transformation[3] * point.y() + transformation[5];
+        return new Point(newX, newY);
+    }
+
 }
