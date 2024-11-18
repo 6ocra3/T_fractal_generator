@@ -1,8 +1,9 @@
 package backend.academy.fractal.transformations;
 
+import backend.academy.fractal.structs.Point;
 import java.util.Random;
 
-public class TransformationsService {
+public class Transformations {
     Random rnd = new Random();
     public final double[][] transformations = {
         {0.5, 0.0, 0.0, 0.5, -1.0, 1.0},
