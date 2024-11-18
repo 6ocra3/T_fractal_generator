@@ -1,4 +1,4 @@
-package backend.academy.flameFractalsApp;
+package backend.academy.fractal;
 
 import java.awt.Color;
 

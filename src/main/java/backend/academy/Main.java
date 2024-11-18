@@ -1,6 +1,6 @@
 package backend.academy;
 
-import backend.academy.flameFractalsApp.FractalApp;
+import backend.academy.fractal.FractalApp;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
