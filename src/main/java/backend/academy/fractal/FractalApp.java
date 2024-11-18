@@ -7,8 +7,8 @@ import backend.academy.fractal.variations.Variations;
 import java.awt.Color;
 
 public class FractalApp {
-    int width = 400;
-    int height = 800;
+    int width = 1000;
+    int height = 1000;
     Color[][] colorMap;
     int[][] densityMap;
     int iterations = 1_000_000;
@@ -26,5 +26,6 @@ public class FractalApp {
             ImagePoint imagePoint = fractal.convertToImageCoords(point);
             image.addPoint(imagePoint);
         }
+        image.saveImage("fractal.png");
     }
 }
