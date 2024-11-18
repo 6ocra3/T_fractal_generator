@@ -18,8 +18,10 @@ public class FractalApp {
         Fractal fractal = new Fractal(width, height);
         Point point = fractal.getRandomPoint();
         for(int iter = 0; iter<iterations;iter++){
-            Point newPoint = transformations.applyTransformation(point);
-            newPoint = variations.applyVariation(newPoint);
+            point = transformations.applyTransformation(point);
+            point = variations.applyVariation(point);
+
+            Point imagePoint = fractal.convertToImageCoords(point);
 
         }
     }
