@@ -1,5 +1,6 @@
 package backend.academy.fractal;
 
+import backend.academy.fractal.structs.ImagePoint;
 import backend.academy.fractal.structs.Pixel;
 import backend.academy.fractal.structs.Point;
 import java.util.Random;
@@ -24,9 +25,9 @@ public class Fractal {
         return new Point(x, y);
     }
 
-    public Point convertToImageCoords(Point point){
+    public ImagePoint convertToImageCoords(Point point){
         int x = (int) ((point.x() + ratio) * (imageWidth - 1) / (ratio*2));
         int y = (int) ((point.y() + 1) * (imageHeight - 1) / 2);
-        return new Point(x, y);
+        return new ImagePoint(x, y);
     }
 }
