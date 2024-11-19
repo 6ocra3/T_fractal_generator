@@ -21,7 +21,7 @@ public class FractalImage {
 
     public FractalImage(int width, int height, int maxTransformations, int maxVariations){
         List<Color> multiColors = List.of(Color.WHITE, Color.BLUE, Color.RED);
-        gradient = generateMultiGradient(multiColors, maxVariations+1);
+        gradient = Gradient.generateMultiGradient(multiColors, maxVariations+1);
 
         this.width = width;
         this.height = height;
@@ -53,7 +53,9 @@ public class FractalImage {
 
     public void saveImage(String imageName){
         image = gammaProcessor.process(image);
+
         BufferedImage bufferedImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+
         for(int y = 0; y<height;y++){
             for(int x = 0;x<width;x++){
                 bufferedImage.setRGB(x, y, image[y][x].color().getRGB());
@@ -67,38 +69,6 @@ public class FractalImage {
         } catch (IOException e) {
             System.err.println("Ошибка при сохранении изображения: " + e.getMessage());
         }
-    }
-
-    public static List<Color> generateMultiGradient(List<Color> colors, int n) {
-        List<Color> gradient = new ArrayList<>();
-        if (colors.size() < 2 || n < colors.size()) throw new IllegalArgumentException("Invalid input");
-
-        int segments = colors.size() - 1;
-        int stepsPerSegment = n / segments;
-        int remaining = n % segments;
-
-        for (int i = 0; i < segments; i++) {
-            Color startColor = colors.get(i);
-            Color endColor = colors.get(i + 1);
-            int steps = stepsPerSegment + (remaining-- > 0 ? 1 : 0);
-
-            List<Color> segmentGradient = generateGradient(startColor, endColor, steps);
-            gradient.addAll(segmentGradient.subList(0, segmentGradient.size() - 1)); // Avoid duplicates
-        }
-        gradient.add(colors.getLast());
-        return gradient;
-    }
-
-    public static List<Color> generateGradient(Color startColor, Color endColor, int n) {
-        List<Color> gradient = new ArrayList<>();
-        for (int i = 0; i < n; i++) {
-            double ratio = (double) i / (n - 1);
-            int red = (int) (startColor.getRed() + ratio * (endColor.getRed() - startColor.getRed()));
-            int green = (int) (startColor.getGreen() + ratio * (endColor.getGreen() - startColor.getGreen()));
-            int blue = (int) (startColor.getBlue() + ratio * (endColor.getBlue() - startColor.getBlue()));
-            gradient.add(new Color(red, green, blue));
-        }
-        return gradient;
     }
 
     private Color blendColors(Color baseColor, Color newColor, double ratio) {

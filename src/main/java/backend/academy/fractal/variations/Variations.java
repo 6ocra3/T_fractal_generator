@@ -12,7 +12,7 @@ public class Variations {
     Random rnd = new Random();
     List<Variation> variations =
         List.of(new SphericalVariation(), new BubbleVariation(), new HeartVariation(), new SwirlVariation());
-    double[] chances = new double[]{0.35, 0.5, 0.2, 0.7};
+    double[] chances = new double[] {0.35, 0.5, 0.2, 0.7};
 
     public int getVariation() {
         double sum = 0;
@@ -25,11 +25,11 @@ public class Variations {
         int multiplicator = 10000;
         int randInt = rnd.nextInt(multiplicator);
         int prev = 0;
-        for(int i = 0; i<variations.size();i++){
-            if(prev < randInt && randInt <= prev+chances[i]*multiplicator){
+        for (int i = 0; i < variations.size(); i++) {
+            if (prev < randInt && randInt <= prev + chances[i] * multiplicator) {
                 return i;
             }
-            prev+= (int) (chances[i]*multiplicator);
+            prev += (int) (chances[i] * multiplicator);
         }
         return 0;
     }
@@ -44,6 +44,7 @@ public class Variations {
         return variationIndex;
     }
 
-    public int getMaxCount(){return variations.size();}
-
+    public int getMaxCount() {
+        return variations.size();
+    }
 }
