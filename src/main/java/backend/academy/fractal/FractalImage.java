@@ -18,8 +18,8 @@ public class FractalImage {
     int height;
 
     public FractalImage(int width, int height, int maxTransformations, int maxVariations){
-        List<Color> multiColors = List.of(Color.RED, Color.GREEN, Color.BLUE);
-        gradient = generateMultiGradient(multiColors, maxVariations);
+        List<Color> multiColors = List.of(Color.WHITE, Color.BLUE, Color.GREEN);
+        gradient = generateMultiGradient(multiColors, maxVariations+1);
 
         this.width = width;
         this.height = height;
@@ -34,8 +34,16 @@ public class FractalImage {
 
     public void addPoint(ImagePoint point, int transformationIndex, int variationIndex){
         if (point.x() >= 0 && point.x() < width && point.y() >= 0 && point.y() < height) {
-            image[point.y()][point.x()].incrementDensity();
-            image[point.y()][point.x()].color(new Color(255, 255, 255));
+            Pixel pixel = image[point.y()][point.x()];
+            pixel.incrementDensity();
+
+            double ratio = Math.min(1.0, 0.1 * pixel.density()); // Чем больше плотность, тем сильнее новый цвет
+
+            Color variationColor = gradient.get(variationIndex);
+
+            Color blendedColor = blendColors(pixel.color(), variationColor, ratio);
+
+            pixel.color(blendedColor);
         }
     }
 
@@ -86,5 +94,12 @@ public class FractalImage {
             gradient.add(new Color(red, green, blue));
         }
         return gradient;
+    }
+
+    private Color blendColors(Color baseColor, Color newColor, double ratio) {
+        int red = (int) (baseColor.getRed() * (1 - ratio) + newColor.getRed() * ratio);
+        int green = (int) (baseColor.getGreen() * (1 - ratio) + newColor.getGreen() * ratio);
+        int blue = (int) (baseColor.getBlue() * (1 - ratio) + newColor.getBlue() * ratio);
+        return new Color(red, green, blue);
     }
 }
