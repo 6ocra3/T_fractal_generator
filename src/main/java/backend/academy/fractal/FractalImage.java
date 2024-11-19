@@ -66,7 +66,7 @@ public class FractalImage {
 
     public void saveImage(String imageName){
         image = gammaProcessor.process(image);
-        addSymmetry(true, true);
+        addSymmetry(false, false);
 
         BufferedImage bufferedImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
 

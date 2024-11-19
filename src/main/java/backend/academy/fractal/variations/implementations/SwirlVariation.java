@@ -6,7 +6,7 @@ import backend.academy.fractal.variations.Variation;
 public class SwirlVariation implements Variation {
     @Override
     public String getName() {
-        return "swirl variation";
+        return "swirl";
     }
 
     @Override

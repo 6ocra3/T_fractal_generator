@@ -6,7 +6,7 @@ import backend.academy.fractal.variations.Variation;
 public class HeartVariation implements Variation {
     @Override
     public String getName() {
-        return "heart variation";
+        return "heart";
     }
 
     @Override

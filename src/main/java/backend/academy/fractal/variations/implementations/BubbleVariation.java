@@ -6,7 +6,7 @@ import backend.academy.fractal.variations.Variation;
 public class BubbleVariation implements Variation {
     @Override
     public String getName() {
-        return "bubble variation";
+        return "bubble";
     }
 
     @Override

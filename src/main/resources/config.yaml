@@ -1,0 +1,23 @@
+fractal:
+    width: 1920
+    height: 1080
+    horizontal: True
+    vertical: False
+
+transformations:
+    - transformation: [0.5, 0.0, 0.0, 0.5, -1.0, 1.0]
+      chance: 0.25
+    - transformation: [0.5, 0.0, 0.0, 0.5, 1.0, -1.0]
+      chance: 0.25
+    - transformation: [0.5, 0.5, -0.5, 0.5, -1.0, -1.0]
+      chance: 0.25
+# possible variations: bubble, heart, spherical, swirl;
+variations:
+    - name: "bubble"
+      chance: 0.25
+    - name: "heart"
+      chance: 0.25
+    - name: "spherical"
+      chance: 0.25
+    - name: "swirl"
+      chance: 0.25

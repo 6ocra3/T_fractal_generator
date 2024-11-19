@@ -6,7 +6,7 @@ import backend.academy.fractal.variations.Variation;
 public class SphericalVariation implements Variation {
     @Override
     public String getName() {
-        return "spherical variation";
+        return "spherical";
     }
 
     @Override
