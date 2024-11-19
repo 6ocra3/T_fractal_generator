@@ -1,5 +1,6 @@
 package backend.academy.fractal;
 
+import backend.academy.fractal.processors.LogarithmicGammaProcessor;
 import backend.academy.fractal.structs.ImagePoint;
 import backend.academy.fractal.structs.Pixel;
 import javax.imageio.ImageIO;
@@ -14,11 +15,12 @@ public class FractalImage {
     List<Color> gradient;
     Color baseColor = new Color(0,0,0);
     Pixel[][] image;
+    LogarithmicGammaProcessor gammaProcessor = new LogarithmicGammaProcessor();
     int width;
     int height;
 
     public FractalImage(int width, int height, int maxTransformations, int maxVariations){
-        List<Color> multiColors = List.of(Color.WHITE, Color.BLUE, Color.GREEN);
+        List<Color> multiColors = List.of(Color.WHITE, Color.BLUE, Color.RED);
         gradient = generateMultiGradient(multiColors, maxVariations+1);
 
         this.width = width;
@@ -37,7 +39,7 @@ public class FractalImage {
             Pixel pixel = image[point.y()][point.x()];
             pixel.incrementDensity();
 
-            double ratio = Math.min(1.0, 0.1 * pixel.density()); // Чем больше плотность, тем сильнее новый цвет
+            double ratio = Math.min(1.0, 0.1 * pixel.density());
 
             Color variationColor = gradient.get(variationIndex);
 
@@ -47,7 +49,10 @@ public class FractalImage {
         }
     }
 
+
+
     public void saveImage(String imageName){
+        image = gammaProcessor.process(image);
         BufferedImage bufferedImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
         for(int y = 0; y<height;y++){
             for(int x = 0;x<width;x++){

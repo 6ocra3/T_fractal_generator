@@ -7,11 +7,9 @@ import backend.academy.fractal.variations.Variations;
 import java.awt.Color;
 
 public class FractalApp {
-    int width = 1000;
-    int height = 1000;
-    Color[][] colorMap;
-    int[][] densityMap;
-    int iterations = 1_000_000;
+    int width = 2560;
+    int height = 1440;
+    int iterations = 10_000_000;
     Transformations transformations = new Transformations();
     Variations variations = new Variations();
 
