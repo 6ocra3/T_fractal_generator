@@ -49,10 +49,24 @@ public class FractalImage {
         }
     }
 
-
+    private void addSymmetry(boolean xSymmetry, boolean ySymmetry){
+        if(xSymmetry){
+            for(int y = 0; y<height/2;y++){
+                if (width >= 0) System.arraycopy(image[y], 0, image[height - y - 1], 0, width);
+            }
+        }
+        if(ySymmetry){
+            for(int y = 0; y<height;y++){
+                for(int x = 0; x<width/2;x++){
+                    image[y][width-x-1] = image[y][x];
+                }
+            }
+        }
+    }
 
     public void saveImage(String imageName){
         image = gammaProcessor.process(image);
+        addSymmetry(true, true);
 
         BufferedImage bufferedImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
 
