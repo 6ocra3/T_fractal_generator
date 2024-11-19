@@ -7,14 +7,20 @@ import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class FractalImage {
+    List<Color> gradient;
     Color baseColor = new Color(0,0,0);
     Pixel[][] image;
     int width;
     int height;
 
-    public FractalImage(int width, int height){
+    public FractalImage(int width, int height, int maxTransformations, int maxVariations){
+        List<Color> multiColors = List.of(Color.RED, Color.GREEN, Color.BLUE);
+        gradient = generateMultiGradient(multiColors, maxVariations);
+
         this.width = width;
         this.height = height;
         image = new Pixel[height][width];
@@ -26,7 +32,7 @@ public class FractalImage {
         }
     }
 
-    public void addPoint(ImagePoint point){
+    public void addPoint(ImagePoint point, int transformationIndex, int variationIndex){
         if (point.x() >= 0 && point.x() < width && point.y() >= 0 && point.y() < height) {
             image[point.y()][point.x()].incrementDensity();
             image[point.y()][point.x()].color(new Color(255, 255, 255));
@@ -48,5 +54,37 @@ public class FractalImage {
         } catch (IOException e) {
             System.err.println("Ошибка при сохранении изображения: " + e.getMessage());
         }
+    }
+
+    public static List<Color> generateMultiGradient(List<Color> colors, int n) {
+        List<Color> gradient = new ArrayList<>();
+        if (colors.size() < 2 || n < colors.size()) throw new IllegalArgumentException("Invalid input");
+
+        int segments = colors.size() - 1;
+        int stepsPerSegment = n / segments;
+        int remaining = n % segments;
+
+        for (int i = 0; i < segments; i++) {
+            Color startColor = colors.get(i);
+            Color endColor = colors.get(i + 1);
+            int steps = stepsPerSegment + (remaining-- > 0 ? 1 : 0);
+
+            List<Color> segmentGradient = generateGradient(startColor, endColor, steps);
+            gradient.addAll(segmentGradient.subList(0, segmentGradient.size() - 1)); // Avoid duplicates
+        }
+        gradient.add(colors.getLast());
+        return gradient;
+    }
+
+    public static List<Color> generateGradient(Color startColor, Color endColor, int n) {
+        List<Color> gradient = new ArrayList<>();
+        for (int i = 0; i < n; i++) {
+            double ratio = (double) i / (n - 1);
+            int red = (int) (startColor.getRed() + ratio * (endColor.getRed() - startColor.getRed()));
+            int green = (int) (startColor.getGreen() + ratio * (endColor.getGreen() - startColor.getGreen()));
+            int blue = (int) (startColor.getBlue() + ratio * (endColor.getBlue() - startColor.getBlue()));
+            gradient.add(new Color(red, green, blue));
+        }
+        return gradient;
     }
 }

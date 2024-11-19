@@ -13,18 +13,20 @@ public class Variations {
     List<Variation> variations =
         List.of(new SphericalVariation(), new BubbleVariation(), new HeartVariation(), new SwirlVariation());
 
-    public Variation getVariation() {
-        int t = rnd.nextInt(variations.size());
-        return variations.get(t);
+    public int getVariation() {
+        return rnd.nextInt(variations.size());
     }
 
-    public Point applyVariation(Point point) {
-        Variation variation = getVariation();
-        return applyVariation(point, variation);
+    public int applyVariation(Point point) {
+        int variationIndex = getVariation();
+        return applyVariation(point, variationIndex);
     }
 
-    public Point applyVariation(Point point, Variation variation) {
-        return variation.apply(point);
+    public int applyVariation(Point point, int variationIndex) {
+        variations.get(variationIndex).apply(point);
+        return variationIndex;
     }
+
+    public int getMaxCount(){return variations.size();}
 
 }

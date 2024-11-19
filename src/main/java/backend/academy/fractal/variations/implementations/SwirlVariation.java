@@ -10,13 +10,10 @@ public class SwirlVariation implements Variation {
     }
 
     @Override
-    public Point apply(Point point) {
+    public void apply(Point point) {
         double x = point.x();
         double y = point.y();
         double r = x * x + y * y;
-        return new Point(
-            x * Math.sin(r) - y * Math.cos(r),
-            x * Math.cos(r) + y * Math.sin(r)
-        );
+        point.updateCoords(x * Math.sin(r) - y * Math.cos(r), x * Math.cos(r) + y * Math.sin(r));
     }
 }

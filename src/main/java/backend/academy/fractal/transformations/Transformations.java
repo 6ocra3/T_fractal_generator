@@ -11,20 +11,23 @@ public class Transformations {
         {0.5, 0.5, -0.5, 0.5, -1.0, -1.0}
     };
 
-    public double[] getTransformation(){
-        int t = rnd.nextInt(transformations.length);
-        return transformations[t];
+    public int getTransformationIndex(){
+        return rnd.nextInt(transformations.length);
     }
 
-    public Point applyTransformation(Point point){
-        double[] transformation = getTransformation();
-        return applyTransformation(point, transformation);
+    public int applyTransformation(Point point){
+        int index = getTransformationIndex();
+        return applyTransformation(point, index);
     }
 
-    public Point applyTransformation(Point point, double[] transformation){
+    public int applyTransformation(Point point, int transformationIndex){
+        double[] transformation = transformations[transformationIndex];
         double newX = transformation[0] * point.x() + transformation[1] * point.y() + transformation[4];
         double newY = transformation[2] * point.x() + transformation[3] * point.y() + transformation[5];
-        return new Point(newX, newY);
+        point.x(newX); point.y(newY);
+        return transformationIndex;
     }
+
+    public int getMaxCount(){return  transformations.length;}
 
 }

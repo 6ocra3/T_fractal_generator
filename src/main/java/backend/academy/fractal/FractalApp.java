@@ -17,14 +17,14 @@ public class FractalApp {
 
     public FractalApp(){
         Fractal fractal = new Fractal(width, height);
-        FractalImage image = new FractalImage(width, height);
+        FractalImage image = new FractalImage(width, height, transformations.getMaxCount(), variations.getMaxCount());
         Point point = fractal.getRandomPoint();
         for(int iter = 0; iter<iterations;iter++){
-            point = transformations.applyTransformation(point);
-            point = variations.applyVariation(point);
+            int transformationInd = transformations.applyTransformation(point);
+            int variationInd = variations.applyVariation(point);
 
             ImagePoint imagePoint = fractal.convertToImageCoords(point);
-            image.addPoint(imagePoint);
+            image.addPoint(imagePoint, transformationInd, variationInd);
         }
         image.saveImage("fractal.png");
     }

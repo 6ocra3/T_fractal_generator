@@ -10,10 +10,10 @@ public class SphericalVariation implements Variation {
     }
 
     @Override
-    public Point apply(Point point) {
+    public void apply(Point point) {
         double x = point.x(); double y = point.y();
         double r = x*x + y*y;
         if (r == 0) r = 1e-6;
-        return new Point(x/r, y/r);
+        point.updateCoords(x/r, y/r);
     }
 }

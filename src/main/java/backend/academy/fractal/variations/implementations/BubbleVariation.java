@@ -10,14 +10,11 @@ public class BubbleVariation implements Variation {
     }
 
     @Override
-    public Point apply(Point point) {
+    public void apply(Point point) {
         double x = point.x();
         double y = point.y();
         double r = x * x + y * y;
         double scale = 4 / (r + 4);
-        return new Point(
-            scale * x,
-            scale * y
-        );
+        point.updateCoords(scale * x, scale * y);
     }
 }

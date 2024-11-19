@@ -4,5 +4,5 @@ import backend.academy.fractal.structs.Point;
 
 public interface Variation {
     String getName();
-    Point apply(Point point);
+    void apply(Point point);
 }
