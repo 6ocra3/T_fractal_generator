@@ -12,9 +12,26 @@ public class Variations {
     Random rnd = new Random();
     List<Variation> variations =
         List.of(new SphericalVariation(), new BubbleVariation(), new HeartVariation(), new SwirlVariation());
+    double[] chances = new double[]{0.35, 0.5, 0.2, 0.7};
 
     public int getVariation() {
-        return rnd.nextInt(variations.size());
+        double sum = 0;
+        for (double chance : chances) {
+            sum += chance;
+        }
+        for (int i = 0; i < chances.length; i++) {
+            chances[i] /= sum;
+        }
+        int multiplicator = 10000;
+        int randInt = rnd.nextInt(multiplicator);
+        int prev = 0;
+        for(int i = 0; i<variations.size();i++){
+            if(prev < randInt && randInt <= prev+chances[i]*multiplicator){
+                return i;
+            }
+            prev+= (int) (chances[i]*multiplicator);
+        }
+        return 0;
     }
 
     public int applyVariation(Point point) {
