@@ -1,15 +1,22 @@
 package backend.academy.fractal.transformations;
 
+import backend.academy.fractal.config.TransformationConfig;
 import backend.academy.fractal.structs.Point;
+import java.util.List;
 import java.util.Random;
 
 public class Transformations {
+    private List<TransformationConfig> config;
     Random rnd = new Random();
     public final double[][] transformations = {
         {0.5, 0.0, 0.0, 0.5, -1.0, 1.0},
         {0.5, 0.0, 0.0, 0.5, 1.0, -1.0},
         {0.5, 0.5, -0.5, 0.5, -1.0, -1.0}
     };
+
+    public Transformations(List<TransformationConfig> config){
+        this.config = config;
+    }
 
     public int getTransformationIndex(){
         return rnd.nextInt(transformations.length);

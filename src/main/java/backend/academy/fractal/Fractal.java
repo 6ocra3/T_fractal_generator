@@ -1,5 +1,6 @@
 package backend.academy.fractal;
 
+import backend.academy.fractal.config.FractalConfig;
 import backend.academy.fractal.structs.ImagePoint;
 import backend.academy.fractal.structs.Pixel;
 import backend.academy.fractal.structs.Point;
@@ -7,14 +8,12 @@ import java.util.Random;
 
 public class Fractal {
     double ratio;
-    int imageWidth;
-    int imageHeight;
+    FractalConfig config;
     Random rnd = new Random();
 
-    public Fractal(int width, int height){
-        imageWidth = width;
-        imageHeight = height;
-        ratio = (double) width / height;
+    public Fractal(FractalConfig config){
+        this.config = config;
+        ratio = (double) config.getWidth() / config.getHeight();
     }
 
     public Point getRandomPoint(){
@@ -26,8 +25,8 @@ public class Fractal {
     }
 
     public ImagePoint convertToImageCoords(Point point){
-        int x = (int) ((point.x() + ratio) * (imageWidth - 1) / (ratio*2));
-        int y = (int) ((point.y() + 1) * (imageHeight - 1) / 2);
+        int x = (int) ((point.x() + ratio) * (config.getWidth() - 1) / (ratio*2));
+        int y = (int) ((point.y() + 1) * (config.getHeight() - 1) / 2);
         return new ImagePoint(x, y);
     }
 }

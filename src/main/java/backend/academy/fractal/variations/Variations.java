@@ -1,5 +1,6 @@
 package backend.academy.fractal.variations;
 
+import backend.academy.fractal.config.VariationConfig;
 import backend.academy.fractal.structs.Point;
 import backend.academy.fractal.variations.implementations.BubbleVariation;
 import backend.academy.fractal.variations.implementations.HeartVariation;
@@ -9,10 +10,16 @@ import java.util.List;
 import java.util.Random;
 
 public class Variations {
+    List<VariationConfig> config;
     Random rnd = new Random();
     List<Variation> variations =
         List.of(new SphericalVariation(), new BubbleVariation(), new HeartVariation(), new SwirlVariation());
-    double[] chances = new double[] {0.35, 0.5, 0.2, 0.7};
+    double[] chances = new double[] {1, 1, 1, 1};
+
+    public Variations(List<VariationConfig> config){
+        this.config = config;
+
+    }
 
     public int getVariation() {
         double sum = 0;

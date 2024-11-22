@@ -15,30 +15,4 @@ public class Config {
 
     public Config() {
     }
-
-    @Getter
-    @Setter
-    @Accessors(fluent = false, chain = false)
-    public static class FractalConfig {
-        private int width;
-        private int height;
-        private boolean horizontal;
-        private boolean vertical;
-    }
-
-    @Getter
-    @Setter
-    @Accessors(fluent = false, chain = false)
-    public static class TransformationConfig {
-        private double[] transformation;
-        private double chance;
-    }
-
-    @Getter
-    @Setter
-    @Accessors(fluent = false, chain = false)
-    public static class VariationConfig {
-        private String name;
-        private double chance;
-    }
 }

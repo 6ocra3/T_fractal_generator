@@ -9,25 +9,16 @@ import backend.academy.fractal.variations.Variations;
 import java.awt.Color;
 
 public class FractalApp {
-    int width = 2560;
-    int height = 1440;
-    int iterations = 10_000_000;
-    Transformations transformations = new Transformations();
-    Variations variations = new Variations();
     Config config;
+    Fractal fractal;
+    FractalImage image;
+    Transformations transformations;
+    Variations variations;
 
     public FractalApp(){
-        try{
-            config = ConfigLoader.loadConfig("config.yaml");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-
-        Fractal fractal = new Fractal(width, height);
-        FractalImage image = new FractalImage(width, height, transformations.getMaxCount(), variations.getMaxCount());
+        setupApp();
         Point point = fractal.getRandomPoint();
-        for(int iter = 0; iter<iterations;iter++){
+        for(int iter = 0; iter<config.getFractal().getIterations();iter++){
             int transformationInd = transformations.applyTransformation(point);
             int variationInd = variations.applyVariation(point);
 
@@ -35,5 +26,19 @@ public class FractalApp {
             image.addPoint(imagePoint, transformationInd, variationInd);
         }
         image.saveImage("fractal.png");
+    }
+
+    private void setupApp(){
+        try{
+            config = ConfigLoader.loadConfig("config.yaml");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        fractal = new Fractal(config.getFractal());
+        image = new FractalImage(config);
+        transformations = new Transformations(config.getTransformations());
+        variations = new Variations(config.getVariations());
+
+
     }
 }
