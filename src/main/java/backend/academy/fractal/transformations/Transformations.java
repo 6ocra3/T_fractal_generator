@@ -2,39 +2,37 @@ package backend.academy.fractal.transformations;
 
 import backend.academy.fractal.config.TransformationConfig;
 import backend.academy.fractal.structs.Point;
+import backend.academy.fractal.utils.GetRandom;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 public class Transformations {
     private List<TransformationConfig> config;
-    Random rnd = new Random();
-    public final double[][] transformations = {
-        {0.5, 0.0, 0.0, 0.5, -1.0, 1.0},
-        {0.5, 0.0, 0.0, 0.5, 1.0, -1.0},
-        {0.5, 0.5, -0.5, 0.5, -1.0, -1.0}
-    };
+    List<List<Double>> transformations;
+    List<Double> chances;
 
     public Transformations(List<TransformationConfig> config){
         this.config = config;
-    }
-
-    public int getTransformationIndex(){
-        return rnd.nextInt(transformations.length);
+        this.transformations = new ArrayList<>();
+        this.chances = new ArrayList<>();
+        for(TransformationConfig transformation : config){
+            transformations.add(transformation.getTransformation());
+            chances.add(transformation.getChance());
+        }
     }
 
     public int applyTransformation(Point point){
-        int index = getTransformationIndex();
+        int index = GetRandom.getRandomWithChances(chances);
         return applyTransformation(point, index);
     }
 
     public int applyTransformation(Point point, int transformationIndex){
-        double[] transformation = transformations[transformationIndex];
-        double newX = transformation[0] * point.x() + transformation[1] * point.y() + transformation[4];
-        double newY = transformation[2] * point.x() + transformation[3] * point.y() + transformation[5];
+        List<Double> transformation = transformations.get(transformationIndex);
+        double newX = transformation.get(0) * point.x() + transformation.get(1) * point.y() + transformation.get(4);
+        double newY = transformation.get(2) * point.x() + transformation.get(3) * point.y() + transformation.get(5);
         point.x(newX); point.y(newY);
         return transformationIndex;
     }
-
-    public int getMaxCount(){return  transformations.length;}
 
 }
