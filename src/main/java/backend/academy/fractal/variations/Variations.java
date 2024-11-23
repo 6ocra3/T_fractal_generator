@@ -9,7 +9,6 @@ import backend.academy.fractal.variations.implementations.SphericalVariation;
 import backend.academy.fractal.variations.implementations.SwirlVariation;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 public class Variations {
     public static final List<Variation> VARIATIONS =
@@ -23,9 +22,9 @@ public class Variations {
         this.variations = new ArrayList<>();
         this.chances = new ArrayList<>();
 
-        for(VariationConfig variationConfig : config){
-            for(Variation variation : VARIATIONS){
-                if(variation.getName().equals(variationConfig.getName())){
+        for (VariationConfig variationConfig : config) {
+            for (Variation variation : VARIATIONS) {
+                if (variation.getName().equals(variationConfig.getName())) {
                     variations.add(variation);
                     chances.add(variationConfig.getChance());
                 }

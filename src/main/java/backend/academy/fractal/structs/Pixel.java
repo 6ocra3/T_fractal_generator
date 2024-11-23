@@ -1,8 +1,8 @@
 package backend.academy.fractal.structs;
 
+import java.awt.Color;
 import lombok.Getter;
 import lombok.Setter;
-import java.awt.Color;
 
 @Getter @Setter
 public class Pixel {
@@ -11,15 +11,14 @@ public class Pixel {
     Color color;
     int density;
 
-
-    public Pixel(int x, int y, Color color, int density){
+    public Pixel(int x, int y, Color color, int density) {
         this.x = x;
         this.y = y;
         this.color = color;
         this.density = density;
     }
 
-    public void incrementDensity(){
+    public void incrementDensity() {
         density++;
     }
 }

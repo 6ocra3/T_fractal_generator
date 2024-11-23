@@ -1,8 +1,10 @@
 package backend.academy.fractal.config;
 
-import org.yaml.snakeyaml.Yaml;
 import java.io.InputStream;
+import lombok.experimental.UtilityClass;
+import org.yaml.snakeyaml.Yaml;
 
+@UtilityClass
 public class ConfigLoader {
     public static Config loadConfig(String fileName) throws Exception {
         Yaml yaml = new Yaml();

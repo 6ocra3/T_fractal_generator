@@ -4,42 +4,44 @@ import backend.academy.fractal.config.Config;
 import backend.academy.fractal.processors.LogarithmicGammaProcessor;
 import backend.academy.fractal.structs.ImagePoint;
 import backend.academy.fractal.structs.Pixel;
-import javax.imageio.ImageIO;
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
+import javax.imageio.ImageIO;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class FractalImage {
+    private static final double RATIO_STEP = 0.1;
     List<Color> multiColors = List.of(Color.WHITE, Color.BLUE, Color.RED);
     List<Color> gradient;
-    Color baseColor = new Color(0,0,0);
+    Color baseColor = new Color(0, 0, 0);
     Pixel[][] image;
     LogarithmicGammaProcessor gammaProcessor = new LogarithmicGammaProcessor();
     int width;
     int height;
 
-    public FractalImage(Config config){
-        gradient = Gradient.generateMultiGradient(multiColors, config.getVariations().size()+1);
+    public FractalImage(Config config) {
+        gradient = Gradient.generateMultiGradient(multiColors, config.getVariations().size() + 1);
         this.width = config.getFractal().getWidth();
         this.height = config.getFractal().getHeight();
         image = new Pixel[height][width];
-        for(int y = 0; y<height;y++){
-            for(int x = 0; x<width;x++){
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
                 Pixel pixel = new Pixel(x, y, baseColor, 0);
                 image[y][x] = pixel;
             }
         }
     }
 
-    public void addPoint(ImagePoint point, int transformationIndex, int variationIndex){
+    public void addPoint(ImagePoint point, int transformationIndex, int variationIndex) {
         if (point.x() >= 0 && point.x() < width && point.y() >= 0 && point.y() < height) {
             Pixel pixel = image[point.y()][point.x()];
             pixel.incrementDensity();
 
-            double ratio = Math.min(1.0, 0.1 * pixel.density());
+            double ratio = Math.min(1.0, RATIO_STEP * pixel.density());
 
             Color variationColor = gradient.get(variationIndex);
 
@@ -49,39 +51,41 @@ public class FractalImage {
         }
     }
 
-    private void addSymmetry(boolean xSymmetry, boolean ySymmetry){
-        if(xSymmetry){
-            for(int y = 0; y<height/2;y++){
-                if (width >= 0) System.arraycopy(image[y], 0, image[height - y - 1], 0, width);
+    private void addSymmetry(boolean xSymmetry, boolean ySymmetry) {
+        if (xSymmetry) {
+            for (int y = 0; y < height / 2; y++) {
+                if (width >= 0) {
+                    System.arraycopy(image[y], 0, image[height - y - 1], 0, width);
+                }
             }
         }
-        if(ySymmetry){
-            for(int y = 0; y<height;y++){
-                for(int x = 0; x<width/2;x++){
-                    image[y][width-x-1] = image[y][x];
+        if (ySymmetry) {
+            for (int y = 0; y < height; y++) {
+                for (int x = 0; x < width / 2; x++) {
+                    image[y][width - x - 1] = image[y][x];
                 }
             }
         }
     }
 
-    public void saveImage(String imageName){
+    public void saveImage(String imageName) {
         image = gammaProcessor.process(image);
         addSymmetry(false, false);
 
         BufferedImage bufferedImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
 
-        for(int y = 0; y<height;y++){
-            for(int x = 0;x<width;x++){
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
                 bufferedImage.setRGB(x, y, image[y][x].color().getRGB());
             }
         }
 
-        try{
+        try {
             File outputFile = new File(imageName);
             ImageIO.write(bufferedImage, "png", outputFile);
-            System.out.println("Фрактал сохранен в файл: " + imageName);
+            log.info("Фрактал сохранен в файл: {}", imageName);
         } catch (IOException e) {
-            System.err.println("Ошибка при сохранении изображения: " + e.getMessage());
+            log.error("Ошибка при сохранении изображения: {}", e.getMessage());
         }
     }
 

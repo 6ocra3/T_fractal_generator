@@ -3,11 +3,15 @@ package backend.academy.fractal;
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
+import lombok.experimental.UtilityClass;
 
+@UtilityClass
 public class Gradient {
     public static List<Color> generateMultiGradient(List<Color> colors, int n) {
         List<Color> gradient = new ArrayList<>();
-        if (colors.size() < 2 || n < colors.size()) throw new IllegalArgumentException("Invalid input");
+        if (colors.size() < 2 || n < colors.size()) {
+            throw new IllegalArgumentException("Invalid input");
+        }
 
         int segments = colors.size() - 1;
         int stepsPerSegment = n / segments;
