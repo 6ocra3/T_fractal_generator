@@ -5,12 +5,12 @@ import backend.academy.fractal.structs.ImagePoint;
 import backend.academy.fractal.structs.Point;
 import java.util.Random;
 
-public class Fractal {
+public class FractalMath {
     double ratio;
     FractalConfig config;
     Random rnd = new Random();
 
-    public Fractal(FractalConfig config) {
+    public FractalMath(FractalConfig config) {
         this.config = config;
         ratio = (double) config.getWidth() / config.getHeight();
     }

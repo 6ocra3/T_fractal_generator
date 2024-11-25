@@ -10,6 +10,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import javax.imageio.ImageIO;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -18,13 +19,16 @@ public class FractalImage {
     List<Color> multiColors = List.of(Color.WHITE, Color.BLUE, Color.RED);
     List<Color> gradient;
     Color baseColor = new Color(0, 0, 0);
+    @Getter
     Pixel[][] image;
     LogarithmicGammaProcessor gammaProcessor = new LogarithmicGammaProcessor();
     int width;
     int height;
+    Config config;
 
     public FractalImage(Config config) {
         gradient = Gradient.generateMultiGradient(multiColors, config.getVariations().size() + 1);
+        this.config = config;
         this.width = config.getFractal().getWidth();
         this.height = config.getFractal().getHeight();
         image = new Pixel[height][width];
@@ -70,7 +74,7 @@ public class FractalImage {
 
     public void saveImage(String imageName) {
         image = gammaProcessor.process(image);
-        addSymmetry(false, false);
+        addSymmetry(config.getFractal().isHorizontal(), config.getFractal().isVertical());
 
         BufferedImage bufferedImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
 
@@ -95,4 +99,38 @@ public class FractalImage {
         int blue = (int) (baseColor.getBlue() * (1 - ratio) + newColor.getBlue() * ratio);
         return new Color(red, green, blue);
     }
+
+    public void blendImages(FractalImage partlyImage){
+        for(int y = 0; y<height;y++){
+            for(int x = 0; x<width;x++){
+                blendPixels(image[y][x], partlyImage.image()[y][x]);
+            }
+        }
+    }
+
+    private void blendPixels(Pixel pixelOrigin, Pixel pixelBlend) {
+        pixelOrigin.density(pixelOrigin.density() + pixelBlend.density());
+        if(pixelBlend.color().equals(baseColor)){
+            return;
+        }
+        if(pixelOrigin.color().equals(baseColor)){
+            pixelOrigin.color(pixelBlend.color());
+            return;
+        }
+        int densityOrigin = pixelOrigin.density();
+        int densityBlend = pixelBlend.density();
+
+        int totalDensity = densityOrigin + densityBlend;
+
+        if (totalDensity == 0) {
+            return;
+        }
+
+
+        double ratio = Math.min(1.0, RATIO_STEP * (densityOrigin + densityBlend)););
+        Color blendedColor = blendColors(pixelOrigin.color(), pixelBlend.color(), 1);
+
+        pixelOrigin.color(blendedColor);
+    }
+
 }

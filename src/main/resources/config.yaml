@@ -1,9 +1,10 @@
 fractal:
     width: 1920
     height: 1080
-    horizontal: True
+    horizontal: False
     vertical: False
     iterations: 10000000
+    threads: 10
 
 transformations:
     - transformation: [0.5, 0.0, 0.0, 0.5, -1.0, 1.0]
