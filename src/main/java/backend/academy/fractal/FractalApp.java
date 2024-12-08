@@ -20,6 +20,7 @@ public class FractalApp {
     public FractalApp() {
         setupApp();
 
+        long startTime = System.nanoTime();
         int totalThreads = config.getFractal().getThreads();
         int iterationsForWorker = config.getFractal().getIterations() / totalThreads;
         ExecutorService executor = Executors.newFixedThreadPool(totalThreads);
@@ -39,6 +40,11 @@ public class FractalApp {
                 log.error(String.valueOf(e));
             }
         }
+
+        long endTime = System.nanoTime();
+        long totalTime = endTime - startTime;
+
+        log.info("Fractal generation completed in {} ms", totalTime/ 1_000_000);
 
         executor.shutdown();
 

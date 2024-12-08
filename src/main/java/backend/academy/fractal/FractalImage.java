@@ -43,13 +43,13 @@ public class FractalImage {
     public void addPoint(ImagePoint point, int transformationIndex, int variationIndex) {
         if (point.x() >= 0 && point.x() < width && point.y() >= 0 && point.y() < height) {
             Pixel pixel = image[point.y()][point.x()];
-            pixel.incrementDensity();
+            int oldDensity = pixel.density();
 
-            double ratio = Math.min(1.0, RATIO_STEP * pixel.density());
+            pixel.incrementDensity();
 
             Color variationColor = gradient.get(variationIndex);
 
-            Color blendedColor = blendColors(pixel.color(), variationColor, ratio);
+            Color blendedColor = blendColors(pixel.color(), variationColor, oldDensity, 1);
 
             pixel.color(blendedColor);
         }
@@ -93,10 +93,15 @@ public class FractalImage {
         }
     }
 
-    private Color blendColors(Color baseColor, Color newColor, double ratio) {
-        int red = (int) (baseColor.getRed() * (1 - ratio) + newColor.getRed() * ratio);
-        int green = (int) (baseColor.getGreen() * (1 - ratio) + newColor.getGreen() * ratio);
-        int blue = (int) (baseColor.getBlue() * (1 - ratio) + newColor.getBlue() * ratio);
+    private Color blendColors(Color baseColor, Color newColor, int densityBase, int densityNew) {
+        if (densityBase == 0) return newColor;
+        if (densityNew == 0) return baseColor;
+
+        // Усредненное взвешивание
+        int red = (densityBase * baseColor.getRed() + densityNew * newColor.getRed()) / (densityBase + densityNew);
+        int green = (densityBase * baseColor.getGreen() + densityNew * newColor.getGreen()) / (densityBase + densityNew);
+        int blue = (densityBase * baseColor.getBlue() + densityNew * newColor.getBlue()) / (densityBase + densityNew);
+
         return new Color(red, green, blue);
     }
 
@@ -109,28 +114,16 @@ public class FractalImage {
     }
 
     private void blendPixels(Pixel pixelOrigin, Pixel pixelBlend) {
-        pixelOrigin.density(pixelOrigin.density() + pixelBlend.density());
-        if(pixelBlend.color().equals(baseColor)){
-            return;
-        }
-        if(pixelOrigin.color().equals(baseColor)){
-            pixelOrigin.color(pixelBlend.color());
-            return;
-        }
         int densityOrigin = pixelOrigin.density();
         int densityBlend = pixelBlend.density();
 
-        int totalDensity = densityOrigin + densityBlend;
+        // Если один из пикселей не имеет плотности, оставляем текущий цвет
+        if (densityBlend == 0) return;
 
-        if (totalDensity == 0) {
-            return;
-        }
-
-
-        double ratio = Math.min(1.0, RATIO_STEP * (densityOrigin + densityBlend)););
-        Color blendedColor = blendColors(pixelOrigin.color(), pixelBlend.color(), 1);
+        Color blendedColor = blendColors(pixelOrigin.color(), pixelBlend.color(), densityOrigin, densityBlend);
 
         pixelOrigin.color(blendedColor);
+        pixelOrigin.density(densityOrigin + densityBlend);
     }
 
 }
