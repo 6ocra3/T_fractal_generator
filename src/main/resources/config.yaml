@@ -5,7 +5,7 @@ fractal:
     vertical: False
     iterations: 10000000
     iterOnPoint:  500000
-    threads: 2
+    threads: 6
 
 
 transformations:

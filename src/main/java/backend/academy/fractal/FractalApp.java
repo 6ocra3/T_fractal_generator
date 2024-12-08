@@ -16,11 +16,12 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class FractalApp {
-    private Config config;
-    private FractalImage image;
+    private final Config config;
+    private final FractalImage image;
 
-    public FractalApp(String configPath) {
-        setupApp(configPath);
+    public FractalApp(Config config) {
+        this.config = config;
+        image = new FractalImage(config);
 
         int totalThreads = config.getFractal().getThreads();
         int iterationsForWorker = config.getFractal().getIterations() / totalThreads;
@@ -65,12 +66,13 @@ public class FractalApp {
         return workerImage;
     }
 
-    private void setupApp(String configPath) {
+    public static Config readConfig(String configPath) {
+        Config config = null;
         try {
             config = ConfigLoader.loadConfig(configPath);
         } catch (Exception e) {
             log.error(String.valueOf(e));
         }
-        image = new FractalImage(config);
+        return config;
     }
 }
