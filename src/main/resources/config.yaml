@@ -4,7 +4,8 @@ fractal:
     horizontal: False
     vertical: False
     iterations: 10000000
-    threads: 1
+    iterOnPoint:  500000
+    threads: 2
 
 
 transformations:
@@ -16,13 +17,13 @@ transformations:
       chance: 0.2
     - transformation: [0.3, -0.3, 0.3, 0.3, 0.0, 1.0]
       chance: 0.1
-    - transformation: [0.6, -0.6, 0.6, 0.6, 1.0, 0.0]
-      chance: 0.1
-    - transformation: [0.4, 0.4, -0.4, 0.4, -0.5, -0.5]
-      chance: 0.1
-    - transformation: [0.7, 0.3, -0.3, 0.7, 0.5, 0.5]
-      chance: 0.1
-# possible variations: bubble, heart, spherical, swirl;
+#    - transformation: [0.6, -0.6, 0.6, 0.6, 1.0, 0.0]
+#      chance: 0.1
+#    - transformation: [0.4, 0.4, -0.4, 0.4, -0.5, -0.5]
+#      chance: 0.1
+#    - transformation: [0.7, 0.3, -0.3, 0.7, 0.5, 0.5]
+#      chance: 0.1
+# possible variations: bubble, heart, spherical, swirl, rectangular, polar;
 variations:
     - name: "heart"
       chance: 0.25
@@ -32,3 +33,7 @@ variations:
       chance: 0.25
     - name: "bubble"
       chance: 0.25
+#    - name: "rectangular"
+#      chance: 0.2
+#    - name: "polar"
+#      chance: 0.2

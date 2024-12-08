@@ -6,28 +6,29 @@ import backend.academy.fractal.structs.ImagePoint;
 import backend.academy.fractal.structs.Point;
 import backend.academy.fractal.transformations.Transformations;
 import backend.academy.fractal.variations.Variations;
-import java.util.concurrent.*;
+import java.util.concurrent.CompletionService;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorCompletionService;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class FractalApp {
-    Config config;
-    FractalMath fractalMath;
-    FractalImage image;
-    Transformations transformations;
-    Variations variations;
+    private Config config;
+    private FractalImage image;
 
-    public FractalApp() {
-        setupApp();
+    public FractalApp(String configPath) {
+        setupApp(configPath);
 
-        long startTime = System.nanoTime();
         int totalThreads = config.getFractal().getThreads();
         int iterationsForWorker = config.getFractal().getIterations() / totalThreads;
         ExecutorService executor = Executors.newFixedThreadPool(totalThreads);
 
         CompletionService<FractalImage> completionService = new ExecutorCompletionService<>(executor);
 
-        for(int i = 0; i<totalThreads;i++){
+        for (int i = 0; i < totalThreads; i++) {
             completionService.submit(() -> startWorker(iterationsForWorker));
         }
 
@@ -41,39 +42,35 @@ public class FractalApp {
             }
         }
 
-        long endTime = System.nanoTime();
-        long totalTime = endTime - startTime;
-
-        log.info("Fractal generation completed in {} ms", totalTime/ 1_000_000);
-
         executor.shutdown();
 
         image.saveImage("fractalMath.png");
     }
 
-    private FractalImage startWorker(int iterations){
+    private FractalImage startWorker(int iterations) {
+        Transformations transformations = new Transformations(config.getTransformations());
+        Variations variations = new Variations(config.getVariations());
+        FractalMath fractalMath = new FractalMath(config.getFractal());
         FractalImage workerImage = new FractalImage(config);
-        Point point = fractalMath.getRandomPoint();
-        for (int iter = 0; iter < iterations; iter++) {
-            int transformationInd = transformations.applyTransformation(point);
-            int variationInd = variations.applyVariation(point);
+        for (int pointNum = 0; pointNum < (iterations / config.getFractal().getIterOnPoint()); pointNum++) {
+            Point point = fractalMath.getRandomPoint();
+            for (int iter = 0; iter < config.getFractal().getIterOnPoint(); iter++) {
+                int transformationInd = transformations.applyTransformation(point);
+                int variationInd = variations.applyVariation(point);
 
-            ImagePoint imagePoint = fractalMath.convertToImageCoords(point);
-            workerImage.addPoint(imagePoint, transformationInd, variationInd);
+                ImagePoint imagePoint = fractalMath.convertToImageCoords(point);
+                workerImage.addPoint(imagePoint, transformationInd, variationInd);
+            }
         }
         return workerImage;
     }
 
-    private void setupApp() {
+    private void setupApp(String configPath) {
         try {
-            config = ConfigLoader.loadConfig("config.yaml");
+            config = ConfigLoader.loadConfig(configPath);
         } catch (Exception e) {
             log.error(String.valueOf(e));
         }
-        fractalMath = new FractalMath(config.getFractal());
         image = new FractalImage(config);
-        transformations = new Transformations(config.getTransformations());
-        variations = new Variations(config.getVariations());
-
     }
 }

@@ -6,9 +6,9 @@ import backend.academy.fractal.structs.Point;
 import java.util.Random;
 
 public class FractalMath {
-    double ratio;
-    FractalConfig config;
-    Random rnd = new Random();
+    private final double ratio;
+    private final FractalConfig config;
+    private final Random rnd = new Random();
 
     public FractalMath(FractalConfig config) {
         this.config = config;

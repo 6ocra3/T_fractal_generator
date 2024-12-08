@@ -15,18 +15,17 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class FractalImage {
-    private static final double RATIO_STEP = 0.1;
-    List<Color> multiColors = List.of(Color.WHITE, Color.BLUE, Color.RED);
-    List<Color> gradient;
-    Color baseColor = new Color(0, 0, 0);
+    public static final Color BASECOLOR = new Color(0, 0, 0);
+    private final List<Color> gradient;
+    private final LogarithmicGammaProcessor gammaProcessor = new LogarithmicGammaProcessor();
+    private final int width;
+    private final int height;
+    private final Config config;
     @Getter
-    Pixel[][] image;
-    LogarithmicGammaProcessor gammaProcessor = new LogarithmicGammaProcessor();
-    int width;
-    int height;
-    Config config;
+    private Pixel[][] image;
 
     public FractalImage(Config config) {
+        List<Color> multiColors = List.of(Color.WHITE, Color.BLUE, Color.RED);
         gradient = Gradient.generateMultiGradient(multiColors, config.getVariations().size() + 1);
         this.config = config;
         this.width = config.getFractal().getWidth();
@@ -34,7 +33,7 @@ public class FractalImage {
         image = new Pixel[height][width];
         for (int y = 0; y < height; y++) {
             for (int x = 0; x < width; x++) {
-                Pixel pixel = new Pixel(x, y, baseColor, 0);
+                Pixel pixel = new Pixel(x, y, BASECOLOR, 0);
                 image[y][x] = pixel;
             }
         }
@@ -94,20 +93,25 @@ public class FractalImage {
     }
 
     private Color blendColors(Color baseColor, Color newColor, int densityBase, int densityNew) {
-        if (densityBase == 0) return newColor;
-        if (densityNew == 0) return baseColor;
+        if (densityBase == 0) {
+            return newColor;
+        }
+        if (densityNew == 0) {
+            return baseColor;
+        }
 
         // Усредненное взвешивание
         int red = (densityBase * baseColor.getRed() + densityNew * newColor.getRed()) / (densityBase + densityNew);
-        int green = (densityBase * baseColor.getGreen() + densityNew * newColor.getGreen()) / (densityBase + densityNew);
+        int green =
+            (densityBase * baseColor.getGreen() + densityNew * newColor.getGreen()) / (densityBase + densityNew);
         int blue = (densityBase * baseColor.getBlue() + densityNew * newColor.getBlue()) / (densityBase + densityNew);
 
         return new Color(red, green, blue);
     }
 
-    public void blendImages(FractalImage partlyImage){
-        for(int y = 0; y<height;y++){
-            for(int x = 0; x<width;x++){
+    public void blendImages(FractalImage partlyImage) {
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
                 blendPixels(image[y][x], partlyImage.image()[y][x]);
             }
         }
@@ -118,7 +122,9 @@ public class FractalImage {
         int densityBlend = pixelBlend.density();
 
         // Если один из пикселей не имеет плотности, оставляем текущий цвет
-        if (densityBlend == 0) return;
+        if (densityBlend == 0) {
+            return;
+        }
 
         Color blendedColor = blendColors(pixelOrigin.color(), pixelBlend.color(), densityOrigin, densityBlend);
 

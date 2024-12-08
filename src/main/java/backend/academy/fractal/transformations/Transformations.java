@@ -8,12 +8,10 @@ import java.util.List;
 
 @SuppressWarnings("MagicNumber")
 public class Transformations {
-    private List<TransformationConfig> config;
-    List<List<Double>> transformations;
-    List<Double> chances;
+    private final List<List<Double>> transformations;
+    private final List<Double> chances;
 
     public Transformations(List<TransformationConfig> config) {
-        this.config = config;
         this.transformations = new ArrayList<>();
         this.chances = new ArrayList<>();
         for (TransformationConfig transformation : config) {

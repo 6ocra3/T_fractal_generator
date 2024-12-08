@@ -6,10 +6,10 @@ import lombok.Setter;
 
 @Getter @Setter
 public class Pixel {
-    int x;
-    int y;
-    Color color;
-    int density;
+    private int x;
+    private int y;
+    private Color color;
+    private int density;
 
     public Pixel(int x, int y, Color color, int density) {
         this.x = x;

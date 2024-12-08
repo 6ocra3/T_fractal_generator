@@ -14,4 +14,5 @@ public class FractalConfig {
     private boolean vertical;
     private int iterations;
     private int threads;
+    private int iterOnPoint;
 }
