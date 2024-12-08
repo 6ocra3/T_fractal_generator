@@ -10,7 +10,8 @@ import lombok.experimental.Accessors;
 @Accessors(fluent = false, chain = false)
 public class Config {
     private FractalConfig fractal;
-    private List<TransformationConfig> transformations;
+    private List<TransformationConfig>
+        transformations;
     private List<VariationConfig> variations;
 
     public Config() {

@@ -9,9 +9,6 @@ import lombok.experimental.UtilityClass;
 public class Gradient {
     public static List<Color> generateMultiGradient(List<Color> colors, int n) {
         List<Color> gradient = new ArrayList<>();
-        if (colors.size() < 2 || n < colors.size()) {
-            throw new IllegalArgumentException("Invalid input");
-        }
 
         int segments = colors.size() - 1;
         int stepsPerSegment = n / segments;

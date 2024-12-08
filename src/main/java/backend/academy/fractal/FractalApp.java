@@ -17,11 +17,10 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class FractalApp {
     private final Config config;
-    private final FractalImage image;
 
     public FractalApp(Config config) {
         this.config = config;
-        image = new FractalImage(config);
+        FractalImage image = new FractalImage(config);
 
         int totalThreads = config.getFractal().getThreads();
         int iterationsForWorker = config.getFractal().getIterations() / totalThreads;

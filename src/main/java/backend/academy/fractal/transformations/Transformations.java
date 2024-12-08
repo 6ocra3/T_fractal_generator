@@ -3,11 +3,13 @@ package backend.academy.fractal.transformations;
 import backend.academy.fractal.config.TransformationConfig;
 import backend.academy.fractal.structs.Point;
 import backend.academy.fractal.utils.GetRandom;
+import lombok.Getter;
 import java.util.ArrayList;
 import java.util.List;
 
 @SuppressWarnings("MagicNumber")
 public class Transformations {
+    @Getter
     private final List<List<Double>> transformations;
     private final List<Double> chances;
 
